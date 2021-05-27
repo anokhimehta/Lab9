@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -25,6 +26,7 @@
     }
   </style>
 </head>
+
 <body>
   <fieldset>
     <legend>Error Calculator</legend>
@@ -56,6 +58,15 @@
     <button>Trigger a Global Error</button>
   </section>
 
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+  <script>
+    window.TrackJS && TrackJS.install({ 
+      token: "091a09034d124d4fb9875fc49e8364e4"
+      // for more configuration options, see https://docs.trackjs.com
+    });
+  </script>
+                        
+
   <script>
     let calculateBtn = document.querySelector('#calculate');
     calculateBtn.addEventListener('click', () => {
@@ -64,10 +75,113 @@
       let secondNum = document.querySelector('#second-num').value;
       let operator = document.querySelector('#operator').value;
       output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+      // try {
+      //   if(secondNum == 0 && operator == '/')
+      //     throw new DivideByZeroError("Cannot divide by zero, Error 1");
+      // } catch (err) {
+      //   alert("Please enter the right type of input");
+      // } finally {
+      //   output.innerHTML = eval(`${Number(firstNum)} ${operator} ${Number(secondNum)}`);
+        
+      // }
     });
 
+    // example of the error APIs and constructs
+    let a = 5;
+    let b = 0;
+    let c;
+    try {
+      if (b == 0) {
+        throw new DivideByZeroError("Cannot divide by zero, Error 2");
+      }
+      c = (a/b);
+    }
+    catch (err) {
+      console.error("DivideByZeroError");
+      c = "undefined";
+    } 
+    finally {
+      console.log("Division: " + c);
+    }
+
     let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
-    // TODO - Make buttons functional
+    let classes = [{ name: "Software Engineering", num: 110 },
+    { name: "Theory of Computation", num: 105 },
+    { name: "Design and Analysis of Algorithms", num: 101 }];
+    errorBtns.forEach(btn => {
+      btn.addEventListener("click", () => {
+        switch (btn) {
+          // Console Log Demo
+          case errorBtns[0]:
+            console.log("Console Log Demo");
+            break;
+          // Console Error Demo
+          case errorBtns[1]:
+            console.error("Console Error Demo");
+            break;
+          // Console Dir 
+          case errorBtns[2]:
+            console.dir(btn);
+            break;
+          // Console dirxml
+          case errorBtns[3]:
+            console.dirxml(document.body);
+            break;
+          // Console Error
+          case errorBtns[4]:
+            console.error("Console Error");
+            break;
+          // Console Group Start
+          case errorBtns[5]:
+            console.group("Console Group Start");
+            break;
+          // Console Group End
+          case errorBtns[6]:
+            console.groupEnd("Console Group End");
+            break;
+          // Console Table
+          case errorBtns[7]:
+            console.table(classes);
+            break;
+          // Start Timer
+          case errorBtns[8]:
+            console.time();
+            break;
+          // End Timer
+          case errorBtns[9]:
+            console.timeEnd();
+            break;
+          // Console Trace
+          case errorBtns[10]:
+            //from Console API Reference
+            const traceTest = () => { deep(); };
+            const deep = () => { deeper(); };
+            const deeper = () => { deepest(); };
+            const deepest = () => { console.trace(); };
+            traceTest();
+            break;
+          // Trigger a global error
+          case errorBtns[11]:
+            console.log("Global Error");
+            break;
+        }
+      });
+    });
+
+    window.onerror = function(msg, src, line, col, err) {
+      console.log("Error: " + msg);
+      TrackJS.track('Testing TrackJS!');
+    }
+
+    class DivideByZeroError extends Error {
+      constructor(message) {
+        super(message);
+        this.name = "DivideByZeroError";
+      }
+    }
+
+
   </script>
 </body>
+
 </html>
